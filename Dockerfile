@@ -1,4 +1,4 @@
-FROM maven:6.3.6-openjdk-14 AS build
+FROM maven:3.6.3-openjdk-14 AS build
 COPY src /src
 COPY pom.xml /
 RUN mvn clean package -DskipTests
