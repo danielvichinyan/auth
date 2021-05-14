@@ -9,26 +9,27 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class JwtImpl {
+public class JwtUtils {
 
-    private final String secretJwt;
+    private final String jwtSecret;
 
-    private final int expirationTimeJwt;
+    private final int jwtExpirationMs;
 
-    public JwtImpl(
-            @Value("$auth.app.secretJwt") String secretJwt,
-            @Value("$auth.app.expirationTimeJwt") int expirationTimeJwt
+    public JwtUtils(
+            @Value("${auth.app.jwtSecret}") String jwtSecret,
+            @Value("${auth.app.jwtExpirationMs}") int jwtExpirationMs
     ) {
-        this.secretJwt = secretJwt;
-        this.expirationTimeJwt = expirationTimeJwt;
+        this.jwtSecret = jwtSecret;
+        this.jwtExpirationMs = jwtExpirationMs;
     }
 
     public String generateJwtToken(User user) {
+
         return JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date((new Date()).getTime() + this.expirationTimeJwt))
+                .withExpiresAt(new Date((new Date()).getTime() + this.jwtExpirationMs))
                 .withKeyId(user.getId())
                 .withIssuedAt(new Date())
-                .sign(Algorithm.HMAC512(this.secretJwt));
+                .sign(Algorithm.HMAC512(this.jwtSecret));
     }
 }

@@ -8,7 +8,7 @@ import com.knowit.auth.domain.models.RegistrationRequestModel;
 import com.knowit.auth.domain.models.RegistrationResponseModel;
 import com.knowit.auth.exceptions.PasswordsDoNotMatchException;
 import com.knowit.auth.exceptions.WrongCredentialsException;
-import com.knowit.auth.jwt.JwtImpl;
+import com.knowit.auth.jwt.JwtUtils;
 import com.knowit.auth.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -24,14 +24,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
-    private final JwtImpl utils;
+    private final JwtUtils utils;
     private final PasswordEncoder passwordEncoder;
     private final StreamBridge streamBridge;
 
     public UserServiceImpl(
             UserRepository userRepository,
             ModelMapper modelMapper,
-            JwtImpl utils,
+            JwtUtils utils,
             PasswordEncoder passwordEncoder,
             StreamBridge streamBridge) {
         this.userRepository = userRepository;
