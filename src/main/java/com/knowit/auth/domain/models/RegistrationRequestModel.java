@@ -2,29 +2,33 @@ package com.knowit.auth.domain.models;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class RegisterUserModel {
+public class RegistrationRequestModel {
 
-    @NotBlank
-    private String id;
+    private String username;
 
-    @NotBlank
+    private String password;
+
+    private String confirmPassword;
+
     private String firstName;
 
-    @NotBlank
     private String lastName;
 
     private LocalDate bornOn;
 
-    public String getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getPassword() {
+        return password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
     public String getFirstName() {

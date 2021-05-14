@@ -2,10 +2,10 @@ package com.knowit.auth.services;
 
 import com.knowit.auth.constants.KafkaConstants;
 import com.knowit.auth.domain.entities.User;
-import com.knowit.auth.domain.models.LoginRequest;
-import com.knowit.auth.domain.models.RegisterRequest;
-import com.knowit.auth.domain.models.RegisterResponse;
+import com.knowit.auth.domain.models.LoginRequestModel;
 import com.knowit.auth.domain.models.RegisterUserModel;
+import com.knowit.auth.domain.models.RegistrationRequestModel;
+import com.knowit.auth.domain.models.RegistrationResponseModel;
 import com.knowit.auth.exceptions.PasswordsDoNotMatchException;
 import com.knowit.auth.exceptions.WrongCredentialsException;
 import com.knowit.auth.jwt.JwtImpl;
@@ -22,50 +22,46 @@ import java.util.function.Supplier;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-
-    private ModelMapper modelMapper;
-
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+    private final JwtImpl utils;
     private final PasswordEncoder passwordEncoder;
-
-    private final JwtImpl jwtUtils;
-
     private final StreamBridge streamBridge;
 
     public UserServiceImpl(
             UserRepository userRepository,
             ModelMapper modelMapper,
+            JwtImpl utils,
             PasswordEncoder passwordEncoder,
-            JwtImpl jwtUtils, StreamBridge streamBridge) {
+            StreamBridge streamBridge) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.utils = utils;
         this.passwordEncoder = passwordEncoder;
-        this.jwtUtils = jwtUtils;
         this.streamBridge = streamBridge;
     }
 
     @Override
-    public RegisterResponse register(RegisterRequest request) throws PasswordsDoNotMatchException {
+    public RegistrationResponseModel register(RegistrationRequestModel request) throws PasswordsDoNotMatchException {
         User user = new User();
         user.setUsername(request.getUsername());
 
         if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new PasswordsDoNotMatchException();
         }
-
         user.setPassword(this.passwordEncoder.encode(request.getPassword()));
         this.userRepository.saveAndFlush(user);
 
         RegisterUserModel userModel = this.modelMapper.map(request, RegisterUserModel.class);
-        User userId = this.userRepository.findFirstByUsername(request.getUsername());
-        userModel.setId(userId.getId());
+        User sentUserId = this.userRepository.findFirstByUsername(request.getUsername());
+        userModel.setId(sentUserId.getId());
         this.streamBridge.send(KafkaConstants.USER_PUBLISHER, userModel);
 
-        return this.modelMapper.map(user, RegisterResponse.class);
+        return this.modelMapper.map(user, RegistrationResponseModel.class);
     }
 
     @Override
-    public String login(LoginRequest request) throws WrongCredentialsException {
+    public String loginUser(LoginRequestModel request) throws WrongCredentialsException {
         User user = this.userRepository.findFirstByUsername(request.getUsername());
 
         if (!this.passwordEncoder.matches(request.getPassword(), user.getPassword()) ||
@@ -73,7 +69,7 @@ public class UserServiceImpl implements UserService {
             throw new WrongCredentialsException();
         }
 
-        return this.jwtUtils.generateJwtToken(user);
+        return this.utils.generateJwtToken(user);
     }
 
     @Bean
