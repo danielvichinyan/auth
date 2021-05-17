@@ -1,9 +1,6 @@
 package com.knowit.auth.domain.models;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class RegistrationRequestModel {
 
@@ -16,6 +13,8 @@ public class RegistrationRequestModel {
     private String firstName;
 
     private String lastName;
+
+    private String email;
 
     private LocalDate bornOn;
 
@@ -53,5 +52,13 @@ public class RegistrationRequestModel {
 
     public void setBornOn(LocalDate bornOn) {
         this.bornOn = bornOn;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

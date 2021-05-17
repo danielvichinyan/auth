@@ -1,4 +1,4 @@
-package com.knowit.auth.services;
+package com.knowit.auth.services.user;
 
 import com.knowit.auth.domain.models.LoginRequestModel;
 import com.knowit.auth.domain.models.RegistrationRequestModel;

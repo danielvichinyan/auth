@@ -6,7 +6,7 @@ import com.knowit.auth.domain.models.RegistrationRequestModel;
 import com.knowit.auth.domain.models.RegistrationResponseModel;
 import com.knowit.auth.exceptions.PasswordsDoNotMatchException;
 import com.knowit.auth.exceptions.WrongCredentialsException;
-import com.knowit.auth.services.UserService;
+import com.knowit.auth.services.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

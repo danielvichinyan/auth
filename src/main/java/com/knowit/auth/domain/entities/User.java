@@ -1,19 +1,20 @@
 package com.knowit.auth.domain.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+public class User extends BaseEntity{
 
     private String username;
 
     private String password;
 
     private LocalDateTime createOn;
+
+    private Set<Role> roles;
 
     public User() {
         this.createOn = LocalDateTime.now();
@@ -43,5 +44,19 @@ public class User extends BaseEntity {
 
     public void setCreateOn(LocalDateTime createOn) {
         this.createOn = createOn;
+    }
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

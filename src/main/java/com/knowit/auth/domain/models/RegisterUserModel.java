@@ -1,10 +1,7 @@
 package com.knowit.auth.domain.models;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class RegisterUserModel {
 
@@ -17,7 +14,11 @@ public class RegisterUserModel {
     @NotBlank
     private String lastName;
 
+    @NotBlank
     private LocalDate bornOn;
+
+    @NotBlank
+    private String email;
 
     public String getId() {
         return id;
@@ -49,5 +50,13 @@ public class RegisterUserModel {
 
     public void setBornOn(LocalDate bornOn) {
         this.bornOn = bornOn;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
