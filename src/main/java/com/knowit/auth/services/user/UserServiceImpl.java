@@ -67,7 +67,6 @@ public class UserServiceImpl implements UserService {
         Role role = null;
         RegisterUserRequestModel registerUserRequestModel = new RegisterUserRequestModel();
 
-
         if (this.userRepository.count() == 0) {
             role = this.roleRepository.findByName(ERole.ADMIN);
             registerUserRequestModel.setRoleADMINId(role.getId());
@@ -81,7 +80,7 @@ public class UserServiceImpl implements UserService {
             registerUserRequestModel.setRoleUSER(role.getName().getAuthority());
             roles.add(role);
             roles.add(roleA);
-        }else {
+        } else {
             role = this.roleRepository.findByName(ERole.USER);
             registerUserRequestModel.setRoleUSERId(role.getId());
             registerUserRequestModel.setRoleUSER(role.getName().getAuthority());
@@ -109,9 +108,7 @@ public class UserServiceImpl implements UserService {
         userModel.setId(sentUserId.getId());
         registerUserRequestModel.setUserId(sentUserId.getId());
 
-
         this.streamBridge.send(KafkaConstants.USER_ID_AND_ROLE, registerUserRequestModel);
-
         this.streamBridge.send(KafkaConstants.USER_PUBLISHER, userModel);
 
         return this.modelMapper.map(user, RegistrationResponseModel.class);
