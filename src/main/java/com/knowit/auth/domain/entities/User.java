@@ -16,8 +16,19 @@ public class User extends BaseEntity{
 
     private Set<Role> roles;
 
+    private int quizPoints;
+
     public User() {
         this.createOn = LocalDateTime.now();
+    }
+
+    @Column(nullable = false)
+    public int getQuizPoints() {
+        return quizPoints;
+    }
+
+    public void setQuizPoints(int quizPoints) {
+        this.quizPoints = quizPoints;
     }
 
     @Column(unique = true, nullable = false)

@@ -18,6 +18,8 @@ public class RegistrationRequestModel {
 
     private LocalDate bornOn;
 
+    private int quizPoints;
+
     public String getUsername() {
         return username;
     }
@@ -60,5 +62,13 @@ public class RegistrationRequestModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getQuizPoints() {
+        return quizPoints;
+    }
+
+    public void setQuizPoints(int quizPoints) {
+        this.quizPoints = quizPoints;
     }
 }
